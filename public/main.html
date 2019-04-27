@@ -9,6 +9,7 @@
                 font-family: 'Roboto', sans-serif;
                 background-color: #6dff59;
             }
+            
             ul {
                 list-style-type: none;
                 margin: 0;
@@ -39,6 +40,8 @@
                 /*background-color: green;*/
                 border:1px solid black;
                 border-radius: 10px;
+                padding-left: 10px;
+                min-height: 20px;
             }
 
             h1 {
@@ -50,6 +53,7 @@
 
             .IngredientData {
                 margin-left: 10px;
+                display: none;
             }
 
             h3 {
@@ -63,7 +67,6 @@
 
             img {
                 width: 30px;
-                padding-left: 10px;
             }
         </style>
 
@@ -131,9 +134,9 @@
                 }
             }
 
-            function addIngredient(ing) {
+            function addIngredient(ing, url) {
                 var q = document.createElement("div");
-                q.innerHTML += "<h3 class='IngredientData'>" + ing.name + "</h3>";
+                q.innerHTML += "<h3><img src='http://pngimg.com/uploads/plus/plus_PNG106.png'>"+ing.name+"</h3>";
                 var i = document.createElement("div");
                 i.classList.add("IngredientData");
                 q.classList.add("ingredient");
@@ -141,7 +144,7 @@
                 i.innerHTML += "<strong>Origin</strong>: " + ing.origin + "<br>";
                 i.innerHTML += "<strong>History</strong>:<br><ol>";
                 for (var j = 0; j < ing.history.length; j++) {
-                    i.innerHTML += "<li>"+ing.history[j] + "</li><br>";
+                    i.innerHTML += "<li>"+ing.history[j].dest + "</li><br>";
                 }
                 i.innerHTML += "</ol><br><strong>Allergens Certified</strong>: <br><ol>";
                 if (ing.allergens != null) {
@@ -163,6 +166,7 @@
             }
 
             $.getJSON(url, (res) => {
+                console.log(res);
                 var prod = document.getElementById("Product_Info");
                 prod.innerHTML += "<strong>"+res.name+"</strong>";
                 for (var m = 0; m < res.all_list.length; m++) {
@@ -171,7 +175,7 @@
                 for (var i = 0; i < res.ingredients.length; i++) {
                     var x = res.ingredients[i];
                     var ing = new Ingredient(x.name, x.origin, x.history, x.id, x.allergens);
-                    addIngredient(ing);
+                    addIngredient(ing, x.url);
 
                 }
             })

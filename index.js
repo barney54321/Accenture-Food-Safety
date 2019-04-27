@@ -45,16 +45,14 @@ app.get("/product/*", (req, res) => {
 })
 
 // This sends the data related to the product ID
-app.get("/data/*", (req, res) => {
-    var test = new Ingredient_JSON("Apple", "Peru", ["Farmer Joe", "Harris Farm"], 1234, ["Nut", "Halal"]);
-    var test1 = new Ingredient_JSON("Pear", "Austria", ["Farmer Bob", "IGA"], 4321, ["Vegan", "Halal"]);
-    var testProd = new Product_JSON("Fruit Salad", [test, test1], ["Nut", "Halal"]);
-    res.send(JSON.stringify(testProd));
-})
+// app.get("/data/*", (req, res) => {
+//     var test = new Ingredient_JSON("Apple", "Peru", ["Farmer Joe", "Harris Farm"], 1234, ["Nut", "Halal"]);
+//     var test1 = new Ingredient_JSON("Pear", "Austria", ["Farmer Bob", "IGA"], 4321, ["Vegan", "Halal"]);
+//     var testProd = new Product_JSON("Fruit Salad", [test, test1], ["Nut", "Halal"]);
+//     res.send(JSON.stringify(testProd));
+// })
 
-app.get("/sdfj/*", (req, res) => {
-    
-    console.log(req.params[0]);
+app.get("/data/*", (req, res) => {
     var product_id = parseInt(req.params[0]);
     const queryString = "SELECT * FROM product_list WHERE product_id='"+product_id+"'";
 
@@ -62,21 +60,14 @@ app.get("/sdfj/*", (req, res) => {
     var prom = new Promise(function(resolve, reject) {
         connection.query(queryString, (err, rows, fields) => {
             if (err) {
-                //res.send("ERROR");
                 reject("Error");
             } else if (rows.length == 0) {
-                //res.send("No such product");
                 reject("No product");
             } else {
                 var row = rows[0];
                 var pro = new Product(row.ingredient_list, row.product_id, 
                     row.description, row.sale_location, row.company, row.allergen_list);
-                
-                //res.write("<h1>"+pro.desc+"</h1>");
-                // socket.on('chat message', function(msg){
-                //     io.emit('chat message', msg);
-                // });
-        
+
                 var ing_list = pro.ing_list;
                 for (var i = 0; i < ing_list.length; i++) {
                     ing_list[i] = parseInt(ing_list[i]);
@@ -96,20 +87,17 @@ app.get("/sdfj/*", (req, res) => {
                 var queryString2 = "SELECT * FROM ingredient_list WHERE ingredient_ID='"+value.ing_list[m]+"'";
                 connection.query(queryString2, (err, rows2, fields) => {
                     if (err) {
-                        reje(s+"");
-                    } else if (rows2.length == 0) {
-                        reje("No product");
-                    }
+                        reje("Database Error");
+                    } 
 
-                    var my_res = {index: s, len: len, id: rows2[0].ingredient_ID, name: rows2[0].description};
+                    var my_res = {index: s, len: len, id: rows2[0].ingredient_ID, name: rows2[0].description, value: value, url: rows2[0].url};
 
                     reso(my_res);
                 })
             })
 
             prom2.then((value) => {
-                //res.write("<h2>"+value.name+"</h2>");
-                var ingredients = [new Ingredient_Block(value.id, 
+                var ingredients = { history: [new Ingredient_Block(value.id, 
                                     "Null", "Farmer Joe", ["Nuts", "Vegan", "Halal"]),
                                 new Ingredient_Block(value.id, 
                                     "Farmer Joe", "North Factory", ["Nuts", "Vegan", "Halal"]),
@@ -117,22 +105,25 @@ app.get("/sdfj/*", (req, res) => {
                                     "North Factory", "South Factory", ["Vegan", "Halal"]),
                                 new Ingredient_Block(value.id, 
                                     "South Factory", "Harris Farm", ["Vegan"]),
-                ];
-
-                var len = ingredients.length;
-                //res.write("<strong>Allergen certifications</strong>: " + ingredients[len-1].all_list);
-                //res.write("<br><strong>History of ingredient</strong>: <ol><li>" + ingredients[0].dest);
-                for (var k = 1; k < len; k++) {
-                    //res.write("</li><li> " + ingredients[k].dest);
-                }
-                //res.write("</li></ol>");
-                
-                //res.write("Connect to blockchain here for allergens");
+                ], name: value.name, origin: null, id: value.id, allergens: null, url: value.url};
+                ingredients.origin = ingredients.history[0].dest;
+                ingredients.allergens = ingredients.history[ingredients.history.length-1].all_list;
+                value.value.ing.push(ingredients);
                 if (value.index == value.len -1) {
-                    //res.end();
+                    var my_json = {
+                        name: value.value.desc,
+                        all_list: [],
+                        ingredients: value.value.ing
+                    }
+                    for (var l = 0; l < my_json.ingredients.length; l++) {
+                        for (var k = 0; k < my_json.ingredients[l].allergens.length; k++) {
+                            my_json.all_list.push(my_json.ingredients[l].allergens[k]);
+                        }
+                    }
+                    my_json.all_list = [...new Set(my_json.all_list)];
+                    res.send(my_json);
                 }
             }, (reason) => {
-                //res.write(reason);
                 if (reason == value.ing_list.length - 1) {
                     //res.end();
                 } 
