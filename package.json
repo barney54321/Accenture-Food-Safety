@@ -1,0 +1,24 @@
+{
+  "name": "accenture",
+  "version": "1.0.0",
+  "description": "Accenture blockchain hackathon project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barney54321/Accenture-Food-Safety.git"
+  },
+  "keywords": [
+    "QR",
+    "node",
+    "blockchain"
+  ],
+  "author": "barney54321",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/barney54321/Accenture-Food-Safety/issues"
+  },
+  "homepage": "https://github.com/barney54321/Accenture-Food-Safety#readme"
+}
