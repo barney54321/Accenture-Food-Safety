@@ -60,6 +60,11 @@
             fieldset {
                 border-radius: 15px;
             }
+
+            img {
+                width: 30px;
+                padding-left: 10px;
+            }
         </style>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -75,8 +80,8 @@
             <ul>
                 <li><a href="/">HOME</a></li>
                 <li><a href="/scanner">SCANNER</a></li>
-                <li><a href="partners">PARTNERS</a></li>
-                <li><a href="settings">SETTINGS</a></li>
+                <li><a href="/partners">PARTNERS</a></li>
+                <li><a href="/settings">SETTINGS</a></li>
             </ul>
         </div>
 
@@ -132,11 +137,9 @@
                 var i = document.createElement("div");
                 i.classList.add("IngredientData");
                 q.classList.add("ingredient");
-                //i.innerHTML = "<fieldset>";
                 i.innerHTML += "<strong>ID</strong>: " + ing.id + "<br>";
                 i.innerHTML += "<strong>Origin</strong>: " + ing.origin + "<br>";
                 i.innerHTML += "<strong>History</strong>:<br><ol>";
-                //i.innerHTML += "</fieldset>";
                 for (var j = 0; j < ing.history.length; j++) {
                     i.innerHTML += "<li>"+ing.history[j] + "</li><br>";
                 }
@@ -159,38 +162,19 @@
                 })
             }
 
-            // var ing = new Ingredient("Apple", "Peru", ["Peru", "Italy", "Spain"], 12345, ["Nuts", "Gluten"]);
-
-            // addIngredient(ing);
-
             $.getJSON(url, (res) => {
-                //console.log(res.all_list);
                 var prod = document.getElementById("Product_Info");
                 prod.innerHTML += "<strong>"+res.name+"</strong>";
                 for (var m = 0; m < res.all_list.length; m++) {
-                    document.getElementById("all_list").innerHTML += res.all_list[m] + "<br>";
+                    document.getElementById("all_list").innerHTML += "<img src='https://img.icons8.com/cotton/2x/checkmark.png'>" + res.all_list[m] + "<br>";
                 }
                 for (var i = 0; i < res.ingredients.length; i++) {
                     var x = res.ingredients[i];
                     var ing = new Ingredient(x.name, x.origin, x.history, x.id, x.allergens);
-                    //var ing = JSON.parse(res[i]);
                     addIngredient(ing);
 
                 }
             })
-
-            // console.log(allergens_list);
-            // for (var m = 0; m < allergens_list.length; m++) {
-            //     console.log(m);
-            //     document.getElementById("all_list").innerHTML += allergens_list[m] + "<br>";
-            // }
-
-            // socket.on('chat message', function(msg){
-            //     //$('#messages').append($('<li>').text(msg));
-            // });
-            // socket.on("msg", function(msg) {
-            //     console.log(msg);
-            // })
 
         </script>
 
