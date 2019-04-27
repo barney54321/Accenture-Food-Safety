@@ -45,13 +45,6 @@ app.get("/product/*", (req, res) => {
 })
 
 // This sends the data related to the product ID
-// app.get("/data/*", (req, res) => {
-//     var test = new Ingredient_JSON("Apple", "Peru", ["Farmer Joe", "Harris Farm"], 1234, ["Nut", "Halal"]);
-//     var test1 = new Ingredient_JSON("Pear", "Austria", ["Farmer Bob", "IGA"], 4321, ["Vegan", "Halal"]);
-//     var testProd = new Product_JSON("Fruit Salad", [test, test1], ["Nut", "Halal"]);
-//     res.send(JSON.stringify(testProd));
-// })
-
 app.get("/data/*", (req, res) => {
     var product_id = parseInt(req.params[0]);
     const queryString = "SELECT * FROM product_list WHERE product_id='"+product_id+"'";
