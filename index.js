@@ -34,6 +34,15 @@ class Ingredient {
     }
 }
 
+class Ingredient_Block {
+    constructor (ing_id, source, dest, all_list) {
+        this.ing_id = ing_id;
+        this.source = source;
+        this.dest = dest;
+        this.all_list = all_list;
+    }
+}
+
 app.get("/product/*", (req, res) => {
     var product_id = parseInt(req.params[0]);
     const queryString = "SELECT * FROM product_list WHERE product_id='"+product_id+"'";
@@ -85,6 +94,20 @@ app.get("/product/*", (req, res) => {
 
             prom2.then((value) => {
                 res.write("<h2>"+value.name+"</h2>");
+                var ingredients = [new Ingredient_Block(value.id, "Null", "Farmer Joe", ["Nuts", "Vegan", "Halal"]),
+                                   new Ingredient_Block(value.id, "Farmer Joe", "North Factory", ["Nuts", "Vegan", "Halal"]),
+                                   new Ingredient_Block(value.id, "North Factory", "South Factory", ["Vegan", "Halal"]),
+                                   new Ingredient_Block(value.id, "South Factory", "Harris Farm", ["Vegan"]),
+                ];
+
+                res.write("<strong>Allergen certifications</strong>: " + ingredients[ingredients.length-1].all_list);
+                res.write("<br><strong>History of ingredient</strong>: <ol><li>" + ingredients[0].dest);
+                for (var k = 1; k < ingredients.length; k++) {
+                    res.write("</li><li> " + ingredients[k].dest);
+                }
+                res.write("</li></ol>");
+                
+                //res.write("Connect to blockchain here for allergens");
                 if (value.index == value.len -1) {
                     res.end();
                 }
