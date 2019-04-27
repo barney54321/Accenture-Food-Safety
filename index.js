@@ -25,6 +25,10 @@ app.get("/scanner", (req, res) => {
     res.sendFile(__dirname + "/public/scanner.html");
 });
 
+app.get("/partners", (req, res) => {
+    res.sendFile(__dirname + "/public/partners.html");
+});
+
 console.log('A user connected');
 // socket.on('disconnect', function(){
 //     console.log('User disconnected');

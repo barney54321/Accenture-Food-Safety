@@ -17,6 +17,10 @@
                 background-color: #77abff;
             }
 
+            ol {
+                list-style-type: none;
+            }
+
             li {
                 float: left;
                 width: 25%;
@@ -104,30 +108,18 @@
             </ul>
         </div>
 
-        <img src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/fruit-salad-horizontal-jpg-1522181219.jpg?crop=1xw:1xh;center,top&resize=768:*">
-
-        <div id="Search">
-            <form>
-                <input type="text" id="text" placeholder="Product ID or Name">
-                <button id="sub" value="Search">Search</button>
-            </form>
-        </div>
-
-        <script>
-            $("#sub").click((e) => {
-                e.preventDefault();
-                var t = $("#text").val();
-                location.replace("/product/"+t);
-                console.log(t);
-            });
-        </script>
-
         <div id="Blurb">
-                FruitSalad is an easy to use way to check what certificates your food has got. With it,
-                you can find out the history of your food product. Each ingredient is tracked on the blockchain
-                from farmer to the store, with a constant check of all food quality certifications such as
-                free of nuts and Halal. Because we use blockchain to track ownership of each ingredient, you
-                can be guaranteed of their history and be confident that their certifications are true.
+                <h2>Supermarket Partners</h2>
+                <ol>
+                    <li><a href="https://www.woolworths.com.au/">Woolworths</a></li><br><br><br>
+                    <li><a href="https://www.iga.com.au/">IGA</a></li>
+                </ol><br><br>
+
+                <h2>Charity Partners</h2>
+                <ol>
+                    <li><a href="https://allergyfacts.org.au/">Anaphylaxis Australia</a></li><br><br><br>
+                    <li><a href="www.halal-australia.com.au/">Halal Australia</a></li>
+                </ol><br><br>
         </div>
 
     </body>
