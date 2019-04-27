@@ -1,6 +1,6 @@
 pragma solidity ^0.5.7;
 
-contract Location{
+contract Location {
     uint public locationID;
     uint[] allergies;
     
