@@ -3,6 +3,9 @@ var express = require("express");
 var app = express();
 var http = require('http').createServer(app);
 
+// Import the web3 library
+var web3 = require("web3");
+
 // Imports the MySQL library
 var mysql = require("mysql");
 
@@ -26,6 +29,42 @@ app.get("/", (req, res) => {
 app.get("/scanner", (req, res) => {
     res.sendFile(__dirname + "/public/scanner.html");
 });
+
+// Random Ingredient Block for testing
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+function randomIngredient (value) {
+    var farmers = ["Bob", "Joe", "Tom", "Nic"];
+    var directions = ["North", "South", "East", "West"];
+    var allergens = ["Nut Free", "Vegan", "Halal", "Gluten Free", "Sulphite Free"];
+    var f = getRandomInt(3);
+    var d = getRandomInt(3);
+    var d1 = 1;
+    if (d == 1) {
+        d1 = 2;
+    }
+    var ingredients = { history: [new Ingredient_Block(value.id, 
+        "Null", "Farmer "+farmers[f], []),
+    new Ingredient_Block(value.id, 
+        "Farmer "+farmers[f], directions[d]+" Factory", []),
+    new Ingredient_Block(value.id, 
+        directions[d]+" Factory", directions[d1]+" Factory", []),
+    new Ingredient_Block(value.id, 
+        directions[d1]+" Factory", "Harris Farm", []),
+    ], name: value.name, origin: null, id: value.id, allergens: null, url: value.url};
+    for (var i = 1; i < allergens.length; i++) {
+        for (var j = 0; j < ingredients.history.length; j++) {
+            if (getRandomInt(2) == 1) {
+                ingredients.history[j].all_list.push(allergens[i]);
+            }
+        }
+    }
+    ingredients.history[ingredients.history.length-1].all_list.push(allergens[0]);
+    ingredients.origin = ingredients.history[0].dest;
+    return ingredients;
+}
 
 // Partners route sends the list of partners
 app.get("/partners", (req, res) => {
@@ -90,15 +129,7 @@ app.get("/data/*", (req, res) => {
             })
 
             prom2.then((value) => {
-                var ingredients = { history: [new Ingredient_Block(value.id, 
-                                    "Null", "Farmer Joe", ["Nuts", "Vegan", "Halal"]),
-                                new Ingredient_Block(value.id, 
-                                    "Farmer Joe", "North Factory", ["Nuts", "Vegan", "Halal"]),
-                                new Ingredient_Block(value.id, 
-                                    "North Factory", "South Factory", ["Vegan", "Halal"]),
-                                new Ingredient_Block(value.id, 
-                                    "South Factory", "Harris Farm", ["Vegan"]),
-                ], name: value.name, origin: null, id: value.id, allergens: null, url: value.url};
+                var ingredients = randomIngredient(value);
                 ingredients.origin = ingredients.history[0].dest;
                 ingredients.allergens = ingredients.history[ingredients.history.length-1].all_list;
                 value.value.ing.push(ingredients);
@@ -108,9 +139,9 @@ app.get("/data/*", (req, res) => {
                         all_list: [],
                         ingredients: value.value.ing
                     }
-                    for (var l = 0; l < my_json.ingredients.length; l++) {
-                        for (var k = 0; k < my_json.ingredients[l].allergens.length; k++) {
-                            my_json.all_list.push(my_json.ingredients[l].allergens[k]);
+                    for (var q = 0; q < my_json.ingredients.length; q++) {
+                        for (var w = 0; w < my_json.ingredients[q].allergens.length; w++) {
+                            my_json.all_list.push(my_json.ingredients[q].allergens[w]);
                         }
                     }
                     my_json.all_list = [...new Set(my_json.all_list)];
@@ -126,7 +157,7 @@ app.get("/data/*", (req, res) => {
         // fulfillment
     }, (reason) => {
         // rejection
-        res.end();
+        res.send({success: false});
     });
 });
 

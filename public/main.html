@@ -9,7 +9,7 @@
                 font-family: 'Roboto', sans-serif;
                 background-color: #6dff59;
             }
-            
+
             ul {
                 list-style-type: none;
                 margin: 0;
@@ -166,7 +166,11 @@
             }
 
             $.getJSON(url, (res) => {
-                console.log(res);
+                if (res.success != undefined) {
+                    var prod = document.getElementById("Product_Info");
+                    prod.innerHTML += "<strong>Product Does Not Exist</strong>";
+                    return;
+                }
                 var prod = document.getElementById("Product_Info");
                 prod.innerHTML += "<strong>"+res.name+"</strong>";
                 for (var m = 0; m < res.all_list.length; m++) {
@@ -176,7 +180,22 @@
                     var x = res.ingredients[i];
                     var ing = new Ingredient(x.name, x.origin, x.history, x.id, x.allergens);
                     addIngredient(ing, x.url);
+                }
 
+                var a = document.getElementById("all_list").innerHTML.split("<br>");
+                for (var i = 0; i < a.length; i++) {
+                    a[i] = a[i].split(">")[1];
+                }
+                a.pop();
+
+                for (var i = 0; i < res.ingredients.length; i++) {
+                    a = a.filter( ( el ) => res.ingredients[i].history[res.ingredients[i].history.length-1].all_list.includes( el ) );
+                }
+                
+                var myNode = document.getElementById("all_list");
+                myNode.innerHTML = '';
+                for(var i = 0; i < a.length; i++) {
+                    myNode.innerHTML += "<img src='https://img.icons8.com/cotton/2x/checkmark.png'>" + a[i] + "<br>";
                 }
             })
 
