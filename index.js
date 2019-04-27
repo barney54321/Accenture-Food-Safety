@@ -3,16 +3,43 @@ var app = express();
 var mysql = require("mysql");
 var Product = require("./product.js");
 var Ingredient = require("./ingredient.js");
+var Ingredient_JSON = require("./Ingredient_JSON.js");
 var Ingredient_Block = require("./ingredient_block.js");
+var Product_JSON = require("./product_JSON.js");
 const connection = require("./connection.js");
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
 port = process.env.PORT || 3030;
+
+// app.get("/", (req, res) => {
+//     res.send("HELLO");
+// })
+
 
 app.get("/", (req, res) => {
     res.send("<a href='/sample'>SAMPLE</a>");
 });
 
+console.log('A user connected');
+// socket.on('disconnect', function(){
+//     console.log('User disconnected');
+// });
+
 app.get("/product/*", (req, res) => {
+    res.sendFile(__dirname+"/public/main.html");
+})
+
+app.get("/data/*", (req, res) => {
+    var test = new Ingredient_JSON("Apple", "Peru", ["Farmer Joe", "Harris Farm"], 1234, ["Nut", "Halal"]);
+    var test1 = new Ingredient_JSON("Pear", "Austria", ["Farmer Bob", "IGA"], 4321, ["Vegan", "Halal"]);
+    var testProd = new Product_JSON("Fruit Salad", [test, test1], ["Nut", "Halal"]);
+    res.send(JSON.stringify(testProd));
+})
+
+app.get("/sdfj/*", (req, res) => {
+    
+    console.log(req.params[0]);
     var product_id = parseInt(req.params[0]);
     const queryString = "SELECT * FROM product_list WHERE product_id='"+product_id+"'";
 
@@ -20,17 +47,20 @@ app.get("/product/*", (req, res) => {
     var prom = new Promise(function(resolve, reject) {
         connection.query(queryString, (err, rows, fields) => {
             if (err) {
-                res.send("ERROR");
+                //res.send("ERROR");
                 reject("Error");
             } else if (rows.length == 0) {
-                res.send("No such product");
+                //res.send("No such product");
                 reject("No product");
             } else {
                 var row = rows[0];
                 var pro = new Product(row.ingredient_list, row.product_id, 
                     row.description, row.sale_location, row.company, row.allergen_list);
                 
-                res.write("<h1>"+pro.desc+"</h1>");
+                //res.write("<h1>"+pro.desc+"</h1>");
+                // socket.on('chat message', function(msg){
+                //     io.emit('chat message', msg);
+                // });
         
                 var ing_list = pro.ing_list;
                 for (var i = 0; i < ing_list.length; i++) {
@@ -63,33 +93,33 @@ app.get("/product/*", (req, res) => {
             })
 
             prom2.then((value) => {
-                res.write("<h2>"+value.name+"</h2>");
+                //res.write("<h2>"+value.name+"</h2>");
                 var ingredients = [new Ingredient_Block(value.id, 
                                     "Null", "Farmer Joe", ["Nuts", "Vegan", "Halal"]),
-                                   new Ingredient_Block(value.id, 
+                                new Ingredient_Block(value.id, 
                                     "Farmer Joe", "North Factory", ["Nuts", "Vegan", "Halal"]),
-                                   new Ingredient_Block(value.id, 
+                                new Ingredient_Block(value.id, 
                                     "North Factory", "South Factory", ["Vegan", "Halal"]),
-                                   new Ingredient_Block(value.id, 
+                                new Ingredient_Block(value.id, 
                                     "South Factory", "Harris Farm", ["Vegan"]),
                 ];
 
                 var len = ingredients.length;
-                res.write("<strong>Allergen certifications</strong>: " + ingredients[len-1].all_list);
-                res.write("<br><strong>History of ingredient</strong>: <ol><li>" + ingredients[0].dest);
+                //res.write("<strong>Allergen certifications</strong>: " + ingredients[len-1].all_list);
+                //res.write("<br><strong>History of ingredient</strong>: <ol><li>" + ingredients[0].dest);
                 for (var k = 1; k < len; k++) {
-                    res.write("</li><li> " + ingredients[k].dest);
+                    //res.write("</li><li> " + ingredients[k].dest);
                 }
-                res.write("</li></ol>");
+                //res.write("</li></ol>");
                 
                 //res.write("Connect to blockchain here for allergens");
                 if (value.index == value.len -1) {
-                    res.end();
+                    //res.end();
                 }
             }, (reason) => {
-                res.write(reason);
+                //res.write(reason);
                 if (reason == value.ing_list.length - 1) {
-                    res.end();
+                    //res.end();
                 } 
             });
         }
@@ -105,6 +135,6 @@ app.get("/sample", (req, res) => {
     res.sendFile(__dirname + "/public/main.html");
 })
 
-var server = app.listen(port, () => {
+http.listen(port, () => {
     console.log("Server is listening to port: " + port);
 });

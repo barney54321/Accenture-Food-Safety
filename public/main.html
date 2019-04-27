@@ -1,8 +1,14 @@
 <html>
     <head>
-        <title>Wagwan</title>
+        <title>FruitSalad</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
 
         <style>
+            * {
+                font-family: 'Roboto', sans-serif;
+                background-color: #6dff59;
+            }
             ul {
                 list-style-type: none;
                 margin: 0;
@@ -13,10 +19,12 @@
 
             li {
                 float: left;
+                width: 25%;
             }
 
             li a {
                 display: block;
+                background-color: #13af0d;
                 color: white;
                 text-align: center;
                 padding: 14px 16px;
@@ -24,20 +32,39 @@
             }
 
             li a:hover {
-                background-color: #6590d4;
+                background-color: #0c9708;
             }
 
             .ingredient {
-                background-color: green;
+                /*background-color: green;*/
+                border:1px solid black;
+                border-radius: 10px;
+            }
+
+            h1 {
+                text-align: center;
+                color: white;
+                font-family: 'Lobster', cursive;
+                font-size: 50px;
+            }
+
+            .IngredientData {
+                margin-left: 10px;
+            }
+
+            h3 {
+                margin-top: 5px;
+                margin-bottom: 5px;
             }
         </style>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
     </head>
 
     <body>
         <div id="Title">
-            <h1>Wagwan</h1>
+            <h1>FruitSalad</h1>
         </div>
 
         <div id="Tools">
@@ -49,15 +76,25 @@
             </ul>
         </div>
 
+        <div id="Product">
+                <fieldset>
+                    <div id="Product_Info">
+                        <h2>Product</h2>
+                    </div>
+                </fieldset>
+    
+            </div>
+
         <div id="Allergens">
             <fieldset>
-                <h2>Allergens</h2>
+                <h2>Certifications</h2>
 
                 <div id="all_list">
 
                 </div>
             </fieldset>
         </div>
+
 
         <div id="Ingredients">
             <fieldset>
@@ -68,11 +105,10 @@
             </fieldset>
         </div>
 
-        <div id="Product">
-
-        </div>
-
         <script>
+            var p_list = window.location.href.split("/");
+            var product_id = p_list[p_list.length - 1];
+            var url = "/data/"+product_id;
 
             var allergens_list = [];
 
@@ -88,41 +124,69 @@
 
             function addIngredient(ing) {
                 var q = document.createElement("div");
-                q.innerHTML += "<h3>" + ing.name + "</h3>";
+                q.innerHTML += "<h3 class='IngredientData'>" + ing.name + "</h3>";
                 var i = document.createElement("div");
+                i.classList.add("IngredientData");
                 q.classList.add("ingredient");
                 //i.innerHTML = "<fieldset>";
                 i.innerHTML += "<strong>ID</strong>: " + ing.id + "<br>";
                 i.innerHTML += "<strong>Origin</strong>: " + ing.origin + "<br>";
-                i.innerHTML += "<strong>History</strong>:<br>";
+                i.innerHTML += "<strong>History</strong>:<br><ol>";
                 //i.innerHTML += "</fieldset>";
                 for (var j = 0; j < ing.history.length; j++) {
-                    i.innerHTML += ing.history[j] + "<br>";
+                    i.innerHTML += "<li>"+ing.history[j] + "</li><br>";
                 }
-                i.innerHTML += "<strong>Allergens</strong>: <br>";
+                i.innerHTML += "</ol><br><strong>Allergens Certified</strong>: <br><ol>";
                 if (ing.allergens != null) {
                     for (var j = 0; j < ing.allergens.length; j++) {
-                        i.innerHTML += ing.allergens[j] + "<br>";
+                        i.innerHTML += "<li>"+ing.allergens[j] + "</li><br>";
                         allergens_list.push(ing.allergens[j]);
                     }
                 } else {
                     i.innerHTML += "None<br>";
                 }
+                i.innerHTML += "</ol>";
                 
                 q.append(i);
                 $("#List").append(q);
+                $(".ingredient").off("click");
                 $(".ingredient").on("click", function(obj) {
                     $($(this).children()[1]).slideToggle(500);
                 })
             }
 
-            var ing = new Ingredient("Apple", "Peru", ["Peru", "Italy", "Spain"], 12345, ["Nuts", "Gluten"]);
+            // var ing = new Ingredient("Apple", "Peru", ["Peru", "Italy", "Spain"], 12345, ["Nuts", "Gluten"]);
 
-            addIngredient(ing);
+            // addIngredient(ing);
 
-            for (var m = 0; m < allergens_list.length; m++) {
-                document.getElementById("all_list").innerHTML += allergens_list[m] + "<br>";
-            }
+            $.getJSON(url, (res) => {
+                //console.log(res.all_list);
+                var prod = document.getElementById("Product_Info");
+                prod.innerHTML += "<strong>"+res.name+"</strong>";
+                for (var m = 0; m < res.all_list.length; m++) {
+                    document.getElementById("all_list").innerHTML += res.all_list[m] + "<br>";
+                }
+                for (var i = 0; i < res.ingredients.length; i++) {
+                    var x = res.ingredients[i];
+                    var ing = new Ingredient(x.name, x.origin, x.history, x.id, x.allergens);
+                    //var ing = JSON.parse(res[i]);
+                    addIngredient(ing);
+
+                }
+            })
+
+            // console.log(allergens_list);
+            // for (var m = 0; m < allergens_list.length; m++) {
+            //     console.log(m);
+            //     document.getElementById("all_list").innerHTML += allergens_list[m] + "<br>";
+            // }
+
+            // socket.on('chat message', function(msg){
+            //     //$('#messages').append($('<li>').text(msg));
+            // });
+            // socket.on("msg", function(msg) {
+            //     console.log(msg);
+            // })
 
         </script>
 
