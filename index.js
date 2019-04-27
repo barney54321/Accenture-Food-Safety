@@ -18,7 +18,11 @@ port = process.env.PORT || 3030;
 
 
 app.get("/", (req, res) => {
-    res.send("<a href='/sample'>SAMPLE</a>");
+    res.sendFile(__dirname + "/public/home.html");
+});
+
+app.get("/scanner", (req, res) => {
+    res.sendFile(__dirname + "/public/scanner.html");
 });
 
 console.log('A user connected');

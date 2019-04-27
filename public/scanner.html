@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>FruitSalad</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+
+        <style>
+            * {
+                font-family: 'Roboto', sans-serif;
+                background-color: #6dff59;
+            }
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #77abff;
+            }
+
+            li {
+                float: left;
+                width: 25%;
+            }
+
+            li a {
+                display: block;
+                background-color: #13af0d;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover {
+                background-color: #0c9708;
+            }
+
+            h1 {
+                text-align: center;
+                color: white;
+                font-family: 'Lobster', cursive;
+                font-size: 50px;
+            }
+
+            video {
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+</head>
+<body>
+    <div id="Title">
+        <h1>FruitSalad</h1>
+    </div>
+
+    <div id="Tools">
+        <ul>
+            <li><a href="/">HOME</a></li>
+            <li><a href="scanner">SCANNER</a></li>
+            <li><a href="partners">PARTNERS</a></li>
+            <li><a href="settings">SETTINGS</a></li>
+        </ul>
+    </div>
+    
+    <video id="preview"></video>
+    <script type="text/javascript">
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+      scanner.addListener('scan', function (content) {
+        location.replace(content);
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    </script>
+   
+</body>
+</html>
