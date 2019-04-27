@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <title>FruitSalad</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+
+        <style>
+            * {
+                font-family: 'Roboto', sans-serif;
+                background-color: #6dff59;
+            }
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #77abff;
+            }
+
+            ol {
+                list-style-type: none;
+            }
+
+            li {
+                float: left;
+                width: 25%;
+            }
+
+            li a {
+                display: block;
+                background-color: #13af0d;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover {
+                background-color: #0c9708;
+            }
+
+            .ingredient {
+                /*background-color: green;*/
+                border:1px solid black;
+                border-radius: 10px;
+            }
+
+            h1 {
+                text-align: center;
+                color: white;
+                font-family: 'Lobster', cursive;
+                font-size: 50px;
+            }
+
+            .IngredientData {
+                margin-left: 10px;
+            }
+
+            h3 {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+
+            fieldset {
+                border-radius: 15px;
+            }
+
+            img {
+                width: 50%;
+                padding-left: 25%;
+            }
+
+            form {
+                margin: 10px;
+                text-align:center;
+            }
+
+            input {
+                font-size: 20px;
+                border-radius: 5px;
+                background-color: white;
+            }
+
+            button {
+                font-size: 20px;
+                background-color: #005f00;
+                color: white;
+                padding: 5px;
+                border-radius: 50%;
+            }
+        </style>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    </head>
+
+    <body>
+        <div id="Title">
+            <h1>FruitSalad</h1>
+        </div>
+
+        <div id="Tools">
+            <ul>
+                <li><a href="/">HOME</a></li>
+                <li><a href="scanner">SCANNER</a></li>
+                <li><a href="partners">PARTNERS</a></li>
+                <li><a href="settings">SETTINGS</a></li>
+            </ul>
+        </div>
+
+        <div id="Blurb">
+                <h2>Supermarket Partners</h2>
+                <ol>
+                    <li><a href="https://www.woolworths.com.au/">Woolworths</a></li><br><br><br>
+                    <li><a href="https://www.iga.com.au/">IGA</a></li>
+                </ol><br><br>
+
+                <h2>Charity Partners</h2>
+                <ol>
+                    <li><a href="https://allergyfacts.org.au/">Anaphylaxis Australia</a></li><br><br><br>
+                    <li><a href="www.halal-australia.com.au/">Halal Australia</a></li>
+                </ol><br><br>
+        </div>
+
+    </body>
+</html>

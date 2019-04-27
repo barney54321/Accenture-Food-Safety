@@ -1,0 +1,134 @@
+<html>
+    <head>
+        <title>FruitSalad</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+
+        <style>
+            * {
+                font-family: 'Roboto', sans-serif;
+                background-color: #6dff59;
+            }
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #77abff;
+            }
+
+            li {
+                float: left;
+                width: 25%;
+            }
+
+            li a {
+                display: block;
+                background-color: #13af0d;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover {
+                background-color: #0c9708;
+            }
+
+            .ingredient {
+                /*background-color: green;*/
+                border:1px solid black;
+                border-radius: 10px;
+            }
+
+            h1 {
+                text-align: center;
+                color: white;
+                font-family: 'Lobster', cursive;
+                font-size: 50px;
+            }
+
+            .IngredientData {
+                margin-left: 10px;
+            }
+
+            h3 {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+
+            fieldset {
+                border-radius: 15px;
+            }
+
+            img {
+                width: 50%;
+                padding-left: 25%;
+            }
+
+            form {
+                margin: 10px;
+                text-align:center;
+            }
+
+            input {
+                font-size: 20px;
+                border-radius: 5px;
+                background-color: white;
+            }
+
+            button {
+                font-size: 20px;
+                background-color: #005f00;
+                color: white;
+                padding: 5px;
+                border-radius: 50%;
+            }
+        </style>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    </head>
+
+    <body>
+        <div id="Title">
+            <h1>FruitSalad</h1>
+        </div>
+
+        <div id="Tools">
+            <ul>
+                <li><a href="/">HOME</a></li>
+                <li><a href="scanner">SCANNER</a></li>
+                <li><a href="partners">PARTNERS</a></li>
+                <li><a href="settings">SETTINGS</a></li>
+            </ul>
+        </div>
+
+        <img src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/fruit-salad-horizontal-jpg-1522181219.jpg?crop=1xw:1xh;center,top&resize=768:*">
+
+        <div id="Search">
+            <form>
+                <input type="text" id="text" placeholder="Product ID">
+                <button id="sub" value="Search">Search</button>
+            </form>
+        </div>
+
+        <script>
+            $("#sub").click((e) => {
+                e.preventDefault();
+                var t = $("#text").val();
+                location.replace("/product/"+t);
+                console.log(t);
+            });
+        </script>
+
+        <div id="Blurb">
+                FruitSalad is an easy to use way to check what certificates your food has got. With it,
+                you can find out the history of your food product. Each ingredient is tracked on the blockchain
+                from farmer to the store, with a constant check of all food quality certifications such as
+                free of nuts and Halal. Because we use blockchain to track ownership of each ingredient, you
+                can be guaranteed of their history and be confident that their certifications are true.
+        </div>
+
+    </body>
+</html>

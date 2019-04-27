@@ -1,0 +1,205 @@
+<html>
+    <head>
+        <title>FruitSalad</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+
+        <style>
+            * {
+                font-family: 'Roboto', sans-serif;
+                background-color: #6dff59;
+            }
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #77abff;
+            }
+
+            li {
+                float: left;
+                width: 25%;
+            }
+
+            li a {
+                display: block;
+                background-color: #13af0d;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover {
+                background-color: #0c9708;
+            }
+
+            .ingredient {
+                /*background-color: green;*/
+                border:1px solid black;
+                border-radius: 10px;
+                padding-left: 10px;
+                min-height: 20px;
+            }
+
+            h1 {
+                text-align: center;
+                color: white;
+                font-family: 'Lobster', cursive;
+                font-size: 50px;
+            }
+
+            .IngredientData {
+                margin-left: 10px;
+                display: none;
+            }
+
+            h3 {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+
+            fieldset {
+                border-radius: 15px;
+            }
+
+            img {
+                width: 30px;
+            }
+        </style>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    </head>
+
+    <body>
+        <div id="Title">
+            <h1>FruitSalad</h1>
+        </div>
+
+        <div id="Tools">
+            <ul>
+                <li><a href="/">HOME</a></li>
+                <li><a href="/scanner">SCANNER</a></li>
+                <li><a href="/partners">PARTNERS</a></li>
+                <li><a href="/settings">SETTINGS</a></li>
+            </ul>
+        </div>
+
+        <div id="Product">
+                <fieldset>
+                    <div id="Product_Info">
+                        <h2>Product</h2>
+                    </div>
+                </fieldset>
+    
+            </div>
+
+        <div id="Allergens">
+            <fieldset>
+                <h2>Certifications</h2>
+
+                <div id="all_list">
+
+                </div>
+            </fieldset>
+        </div>
+
+
+        <div id="Ingredients">
+            <fieldset>
+                <h2>Ingredients</h2>
+                <div id="List">
+
+                </div>
+            </fieldset>
+        </div>
+
+        <script>
+            var p_list = window.location.href.split("/");
+            var product_id = p_list[p_list.length - 1];
+            var url = "/data/"+product_id;
+
+            var allergens_list = [];
+
+            class Ingredient {
+                constructor(name,origin, history, id, allergens) {
+                    this.name = name;
+                    this.origin = origin;
+                    this.history = history;
+                    this.id = id;
+                    this.allergens = allergens;
+                }
+            }
+
+            function addIngredient(ing, url) {
+                var q = document.createElement("div");
+                q.innerHTML += "<h3><img src='http://pngimg.com/uploads/plus/plus_PNG106.png'>"+ing.name+"</h3>";
+                var i = document.createElement("div");
+                i.classList.add("IngredientData");
+                q.classList.add("ingredient");
+                i.innerHTML += "<strong>ID</strong>: " + ing.id + "<br>";
+                i.innerHTML += "<strong>Origin</strong>: " + ing.origin + "<br>";
+                i.innerHTML += "<strong>History</strong>:<br><ol>";
+                for (var j = 0; j < ing.history.length; j++) {
+                    i.innerHTML += "<li>"+ing.history[j].dest + "</li><br>";
+                }
+                i.innerHTML += "</ol><br><strong>Allergens Certified</strong>: <br><ol>";
+                if (ing.allergens != null) {
+                    for (var j = 0; j < ing.allergens.length; j++) {
+                        i.innerHTML += "<li>"+ing.allergens[j] + "</li><br>";
+                        allergens_list.push(ing.allergens[j]);
+                    }
+                } else {
+                    i.innerHTML += "None<br>";
+                }
+                i.innerHTML += "</ol>";
+                
+                q.append(i);
+                $("#List").append(q);
+                $(".ingredient").off("click");
+                $(".ingredient").on("click", function(obj) {
+                    $($(this).children()[1]).slideToggle(500);
+                })
+            }
+
+            $.getJSON(url, (res) => {
+                if (res.success != undefined) {
+                    var prod = document.getElementById("Product_Info");
+                    prod.innerHTML += "<strong>Product Does Not Exist</strong>";
+                    return;
+                }
+                var prod = document.getElementById("Product_Info");
+                prod.innerHTML += "<strong>"+res.name+"</strong>";
+                for (var m = 0; m < res.all_list.length; m++) {
+                    document.getElementById("all_list").innerHTML += "<img src='https://img.icons8.com/cotton/2x/checkmark.png'>" + res.all_list[m] + "<br>";
+                }
+                for (var i = 0; i < res.ingredients.length; i++) {
+                    var x = res.ingredients[i];
+                    var ing = new Ingredient(x.name, x.origin, x.history, x.id, x.allergens);
+                    addIngredient(ing, x.url);
+                }
+
+                var a = document.getElementById("all_list").innerHTML.split("<br>");
+                for (var i = 0; i < a.length; i++) {
+                    a[i] = a[i].split(">")[1];
+                }
+                a.pop();
+
+                for (var i = 0; i < res.ingredients.length; i++) {
+                    a = a.filter( ( el ) => res.ingredients[i].history[res.ingredients[i].history.length-1].all_list.includes( el ) );
+                }
+                
+                var myNode = document.getElementById("all_list");
+                myNode.innerHTML = '';
+                for(var i = 0; i < a.length; i++) {
+                    myNode.innerHTML += "<img src='https://img.icons8.com/cotton/2x/checkmark.png'>" + a[i] + "<br>";
+                }
+            })
+
+        </script>
+
+    </body>
+</html>
