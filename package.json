@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/barney54321/Accenture-Food-Safety/issues"
   },
-  "homepage": "https://github.com/barney54321/Accenture-Food-Safety#readme"
+  "homepage": "https://github.com/barney54321/Accenture-Food-Safety#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }

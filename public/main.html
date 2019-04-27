@@ -1,0 +1,130 @@
+<html>
+    <head>
+        <title>Wagwan</title>
+
+        <style>
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #77abff;
+            }
+
+            li {
+                float: left;
+            }
+
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover {
+                background-color: #6590d4;
+            }
+
+            .ingredient {
+                background-color: green;
+            }
+        </style>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <div id="Title">
+            <h1>Wagwan</h1>
+        </div>
+
+        <div id="Tools">
+            <ul>
+                <li><a href="home">HOME</a></li>
+                <li><a href="about">ABOUT</a></li>
+                <li><a href="partners">PARTNERS</a></li>
+                <li><a href="settings">SETTINGS</a></li>
+            </ul>
+        </div>
+
+        <div id="Allergens">
+            <fieldset>
+                <h2>Allergens</h2>
+
+                <div id="all_list">
+
+                </div>
+            </fieldset>
+        </div>
+
+        <div id="Ingredients">
+            <fieldset>
+                <h2>Ingredients</h2>
+                <div id="List">
+
+                </div>
+            </fieldset>
+        </div>
+
+        <div id="Product">
+
+        </div>
+
+        <script>
+
+            var allergens_list = [];
+
+            class Ingredient {
+                constructor(name,origin, history, id, allergens) {
+                    this.name = name;
+                    this.origin = origin;
+                    this.history = history;
+                    this.id = id;
+                    this.allergens = allergens;
+                }
+            }
+
+            function addIngredient(ing) {
+                var q = document.createElement("div");
+                q.innerHTML += "<h3>" + ing.name + "</h3>";
+                var i = document.createElement("div");
+                q.classList.add("ingredient");
+                //i.innerHTML = "<fieldset>";
+                i.innerHTML += "<strong>ID</strong>: " + ing.id + "<br>";
+                i.innerHTML += "<strong>Origin</strong>: " + ing.origin + "<br>";
+                i.innerHTML += "<strong>History</strong>:<br>";
+                //i.innerHTML += "</fieldset>";
+                for (var j = 0; j < ing.history.length; j++) {
+                    i.innerHTML += ing.history[j] + "<br>";
+                }
+                i.innerHTML += "<strong>Allergens</strong>: <br>";
+                if (ing.allergens != null) {
+                    for (var j = 0; j < ing.allergens.length; j++) {
+                        i.innerHTML += ing.allergens[j] + "<br>";
+                        allergens_list.push(ing.allergens[j]);
+                    }
+                } else {
+                    i.innerHTML += "None<br>";
+                }
+                
+                q.append(i);
+                $("#List").append(q);
+                $(".ingredient").on("click", function(obj) {
+                    $($(this).children()[1]).slideToggle(500);
+                })
+            }
+
+            var ing = new Ingredient("Apple", "Peru", ["Peru", "Italy", "Spain"], 12345, ["Nuts", "Gluten"]);
+
+            addIngredient(ing);
+
+            for (var m = 0; m < allergens_list.length; m++) {
+                document.getElementById("all_list").innerHTML += allergens_list[m] + "<br>";
+            }
+
+        </script>
+
+    </body>
+</html>
