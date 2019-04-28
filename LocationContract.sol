@@ -1,19 +1,19 @@
 pragma solidity ^0.5.7;
 
-contract Location {
-    uint public locationID;
-    uint[] allergies;
+contract Location{
+    uint private locationID;
+    uint[] private allergies;
     
     constructor(uint name, uint[] memory Allergies) public {
         locationID = name;
         allergies = Allergies;
         
     }
-    function getAllergies() public returns (uint[] memory) {
+    function getAllergies() view public returns (uint[] memory) {
         return allergies;
         
     }
-    function getName() public returns (uint) {
+    function getName() view public returns (uint) {
         return locationID;
     }
     
