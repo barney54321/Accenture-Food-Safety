@@ -31,6 +31,9 @@ app.get("/scanner", (req, res) => {
 });
 
 // Random Ingredient Block for testing
+// The prototype uses a simulation of blockchain by creating a 
+// randomly generated JSON object that stores the relative data
+// found in the smart contracts (the .sol files)
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
@@ -88,7 +91,7 @@ app.get("/data/*", (req, res) => {
     var product_id = parseInt(req.params[0]);
     const queryString = "SELECT * FROM product_list WHERE product_id='"+product_id+"'";
 
-
+    // A promise to parse through all the database rows before proceeding on to sending a response
     var prom = new Promise(function(resolve, reject) {
         connection.query(queryString, (err, rows, fields) => {
             if (err) {
