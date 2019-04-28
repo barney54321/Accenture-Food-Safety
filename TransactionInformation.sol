@@ -5,12 +5,12 @@ import "browser/Location.sol";
 
 contract Information {
     
-    uint ingredientId;
-    uint unhashedId;
-    uint idHash;
-    Location sender;
-    Location recipient;
-    uint[] finalAllergies;
+    uint private ingredientId;
+    uint private unhashedId;
+    uint private idHash;
+    Location private sender;
+    Location private recipient;
+    uint[] private finalAllergies;
     
     constructor(uint id, uint rollingId, Location _sender, Location _recipient, uint[] memory allAllergies) public {
         ingredientId = id;
@@ -21,8 +21,28 @@ contract Information {
         finalAllergies = allAllergies;
     }
     
+    function getIngredientId() public view returns (uint) {
+        return ingredientId;
+    }
+    
+    function getUnhashedId() public view returns (uint) {
+        return unhashedId;
+    }
+    
+    function getSenderId() public view returns (uint) {
+        return sender.getName();
+    }
+    
+    function getRecipientId() public view returns (uint) {
+        return recipient.getName();
+    }
+    
+    function getIngredientAllergens() public view returns (uint[] memory) {
+        return finalAllergies;
+    }
+    
     function hashID(uint idNumber) pure public returns (uint){
-       uint hashedIdNumber = (idNumber+19)*69 % 420;
+       uint hashedIdNumber = (idNumber+19)*6704 %1970026;
        return hashedIdNumber;
     }
     
