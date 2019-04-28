@@ -68,6 +68,15 @@
             img {
                 width: 30px;
             }
+
+            .plus {
+                width: 20px;
+                padding-right: 10px;
+            }
+
+            .fruit {
+                width: 70px;
+            }
         </style>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -84,7 +93,7 @@
                 <li><a href="/">HOME</a></li>
                 <li><a href="/scanner">SCANNER</a></li>
                 <li><a href="/partners">PARTNERS</a></li>
-                <li><a href="/settings">SETTINGS</a></li>
+                <li><a href="/about">ABOUT</a></li>
             </ul>
         </div>
 
@@ -136,17 +145,18 @@
 
             function addIngredient(ing, url) {
                 var q = document.createElement("div");
-                q.innerHTML += "<h3><img src='http://pngimg.com/uploads/plus/plus_PNG106.png'>"+ing.name+"</h3>";
+                q.innerHTML += "<h3><img src='https://img.icons8.com/metro/420/plus.png' class='plus'>"+ing.name+"</h3>";
                 var i = document.createElement("div");
                 i.classList.add("IngredientData");
                 q.classList.add("ingredient");
+                i.innerHTML += "<img class='fruit' src='"+url+"'><br>";
                 i.innerHTML += "<strong>ID</strong>: " + ing.id + "<br>";
                 i.innerHTML += "<strong>Origin</strong>: " + ing.origin + "<br>";
                 i.innerHTML += "<strong>History</strong>:<br><ol>";
                 for (var j = 0; j < ing.history.length; j++) {
                     i.innerHTML += "<li>"+ing.history[j].dest + "</li><br>";
                 }
-                i.innerHTML += "</ol><br><strong>Allergens Certified</strong>: <br><ol>";
+                i.innerHTML += "</ol><br><strong>Allergens Certified</strong>: <ol>";
                 if (ing.allergens != null) {
                     for (var j = 0; j < ing.allergens.length; j++) {
                         i.innerHTML += "<li>"+ing.allergens[j] + "</li><br>";
@@ -191,11 +201,11 @@
                 for (var i = 0; i < res.ingredients.length; i++) {
                     a = a.filter( ( el ) => res.ingredients[i].history[res.ingredients[i].history.length-1].all_list.includes( el ) );
                 }
-                
+
                 var myNode = document.getElementById("all_list");
                 myNode.innerHTML = '';
                 for(var i = 0; i < a.length; i++) {
-                    myNode.innerHTML += "<img src='https://img.icons8.com/cotton/2x/checkmark.png'>" + a[i] + "<br>";
+                    myNode.innerHTML += "<img src='https://images.vexels.com/media/users/3/143487/isolated/preview/7fe39483697e2065910f66e9dacafd7e-turquoise-tick-check-mark-by-vexels.png'>" + a[i] + "<br>";
                 }
             })
 

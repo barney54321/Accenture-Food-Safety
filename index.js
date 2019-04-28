@@ -72,8 +72,8 @@ app.get("/partners", (req, res) => {
 });
 
 // Settings route sends the settings page
-app.get("/settings", (req, res) => {
-    res.sendFile(__dirname + "/public/settings.html");
+app.get("/about", (req, res) => {
+    res.sendFile(__dirname + "/public/about.html");
 });
 
 // Wildcard for when a user accesses a product page
