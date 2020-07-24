@@ -1,4 +1,4 @@
-"# Accenture-Food-Safety" 
+# Accenture-Food-Safety
 
 The main program is run through index.js with the command "node index.js".
 
