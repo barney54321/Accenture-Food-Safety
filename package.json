@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/barney54321/Accenture-Food-Safety#readme",
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "mysql": "^2.17.1",
     "socket.io": "^2.2.0",
     "web3": "^1.0.0-beta.52"
